@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>硬件组环境配置指引 | RM 苍穹战队</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7f7;
+      --panel: #ffffff;
+      --soft: #eef6f5;
+      --text: #172026;
+      --muted: #637178;
+      --line: #d8e2e6;
+      --accent: #0f766e;
+      --accent-dark: #0b625c;
+      --link: #1d4ed8;
+      --code: #f2f5f6;
+      --shadow: 0 12px 30px rgba(23, 32, 38, .06);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+    a { color: var(--link); }
+    a:hover { color: var(--accent-dark); }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: var(--max);
+      min-height: 58px;
+      margin: 0 auto;
+      padding: 10px 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand:hover { text-decoration: none; }
+    .brand-mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 6px 10px;
+      color: var(--text);
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      border-color: #9bc7c3;
+      background: var(--soft);
+      text-decoration: none;
+    }
+    .progress {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      background: transparent;
+    }
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      transition: width .1s linear;
+    }
+    .page {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 760px);
+      gap: 32px;
+      align-items: start;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 42px 20px 64px;
+    }
+    .toc {
+      position: sticky;
+      top: 88px;
+      max-height: calc(100vh - 110px);
+      overflow: auto;
+      padding-right: 8px;
+    }
+    .toc-title {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .toc-list {
+      display: grid;
+      gap: 2px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc-list a {
+      display: block;
+      border-left: 2px solid transparent;
+      padding: 5px 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      text-decoration: none;
+    }
+    .toc-list a:hover,
+    .toc-list a.is-current {
+      border-left-color: var(--accent);
+      background: var(--soft);
+      color: var(--accent-dark);
+    }
+    .toc-list .level-3 { padding-left: 20px; font-size: 12px; }
+    .toc-list .level-4 { padding-left: 32px; font-size: 12px; }
+    .reader {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .reader-header {
+      padding: 30px 38px 24px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff 0%, #f8fbfb 100%);
+    }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .reader-header h1 {
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.2;
+    }
+    .metadata {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .metadata span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .markdown-body {
+      padding: 34px 38px 46px;
+      overflow-wrap: anywhere;
+    }
+    .markdown-body h1,
+    .markdown-body h2,
+    .markdown-body h3,
+    .markdown-body h4 {
+      scroll-margin-top: 82px;
+      line-height: 1.3;
+    }
+    .markdown-body h1 {
+      margin: 0 0 24px;
+      font-size: 32px;
+    }
+    .markdown-body h2 {
+      margin: 38px 0 14px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid var(--line);
+      font-size: 23px;
+    }
+    .markdown-body h3 {
+      margin: 28px 0 10px;
+      color: var(--accent-dark);
+      font-size: 19px;
+    }
+    .markdown-body h4 {
+      margin: 22px 0 8px;
+      font-size: 16px;
+    }
+    .markdown-body p {
+      margin: 12px 0;
+      color: #324149;
+    }
+    .markdown-body ul,
+    .markdown-body ol {
+      margin: 10px 0 16px;
+      padding-left: 25px;
+      color: #324149;
+    }
+    .markdown-body li { margin: 5px 0; }
+    .markdown-body li > ul,
+    .markdown-body li > ol {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+    .markdown-body strong {
+      color: var(--text);
+      font-weight: 750;
+    }
+    .markdown-body code {
+      border: 1px solid #dbe4e6;
+      border-radius: 4px;
+      background: var(--code);
+      padding: 1px 5px;
+      color: #9a3412;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .9em;
+    }
+    .markdown-body pre {
+      overflow: auto;
+      margin: 16px 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #172026;
+      padding: 14px 16px;
+      color: #e7f2f1;
+    }
+    .markdown-body pre code {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 13px;
+    }
+    .markdown-body blockquote {
+      margin: 16px 0;
+      border-left: 4px solid var(--accent);
+      background: var(--soft);
+      padding: 8px 14px;
+      color: #3d5759;
+    }
+    .markdown-body hr {
+      margin: 26px 0;
+      border: 0;
+      border-top: 1px solid var(--line);
+    }
+    .empty-line { height: 4px; }
+    .footnote {
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 820px) {
+      .page {
+        display: block;
+        padding-top: 22px;
+      }
+      .toc {
+        position: static;
+        max-height: none;
+        margin-bottom: 18px;
+        padding: 0;
+      }
+      .toc-list {
+        display: flex;
+        overflow-x: auto;
+        gap: 4px;
+        padding-bottom: 4px;
+      }
+      .toc-list a {
+        min-width: max-content;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 6px 9px;
+      }
+      .toc-list .level-3,
+      .toc-list .level-4 { padding-left: 9px; }
+    }
+    @media (max-width: 560px) {
+      .topbar-inner { padding: 9px 12px; }
+      .brand-label { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .page { padding: 14px 12px 34px; }
+      .reader-header { padding: 24px 20px 20px; }
+      .markdown-body { padding: 24px 20px 32px; }
+      .markdown-body h1 { font-size: 27px; }
+      .markdown-body h2 { font-size: 21px; }
+      .reader-header h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">RM</span>
+        <span class="brand-label">苍穹战队硬件组 · Markdown 阅读器</span>
+      </a>
+      <a class="back-link" href="./index.html">← 返回培训导航</a>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  </header>
+
+  <div class="page">
+    <nav class="toc" aria-label="文档目录">
+      <p class="toc-title">目录</p>
+      <ol class="toc-list" id="tocList"></ol>
+    </nav>
+
+    <main class="reader">
+      <header class="reader-header">
+        <span class="eyebrow">硬件组参考资料</span>
+        <h1 id="documentTitle">硬件组环境配置指引</h1>
+        <div class="metadata">
+          <span>作者：谢忠宝</span>
+          <span>更新日期：2026/8/31</span>
+          <span>Markdown 文档</span>
+        </div>
+      </header>
+      <article class="markdown-body" id="markdownBody"></article>
+    </main>
+  </div>
+
+  <script id="markdownSource" type="text/plain">
+---
+author: 谢忠宝
+date: 2026/8/31
+---
+
+# 硬件组环境配置指引
+
+## 生产工具
+
+### 嘉立创EDA专业版
+
+[下载链接](https://pro.lceda.cn/)
+
+国产PCB设计工具，深度整合立创商城元器件库，无需手动绘制常见封装。支持团队协作和云端存储，是硬件组主力设计软件。
+
+安装最新稳定版，注册嘉立创账号后使用。首次启动时建议同步官方标准库。
+
+### 嘉立创下单助手
+
+[下载链接](https://download1.sz-jlc.com/download/jlc-order-assistant.html)
+
+用于将PCB工程直接下单打样，每月可领取两张免费打样券（尺寸限制10cm×10cm以内，板厚1.6mm，常规工艺）
+
+### STM32CubeMX
+
+[STM32CubeMX | 软件 - 意法半导体](https://www.st.com.cn/zh/development-tools/stm32cubemx.html)
+
+**简介：**STM32CubeMX（包括STM32CubeMX和STM32CubeMX2）是一款图形化工具，可简化STM32产品的配置，并通过分步引导的过程生成相应的初始化代码。
+
+第一步是选择一款符合所需外设集的意法半导体STM32微控制器( MCU )、微处理器( MPU )或开发平台，或者选择一个在特定开发平台上运行的示例( example )。
+
+在第二步中，用户可以交互式地配置GPIO、设置系统时钟树，并为应用选择和配置所需的外设及中间件。利用增强型STM32Cube扩展包，可扩展默认软件和中间件栈。意法半导体及其合作伙伴的软件包可直接从Cube生态系统内的专用软件包管理器下载，而其他软件包则可从本地驱动器安装。
+
+RM绝大多数队伍嵌入式环境基于STM32，如 ROBOMASTER 开发板 C 型（C板）为STM32F407IGH6，达妙MC02 H7开发板为STM32H723VGT6。
+
+#### Java Runtime Environment (JRE)
+
+写文档的时候竟然发现STM32CubeMX是需要 JAVA 运行时环境的，所以要安装JRE。
+
+如果下载 Java Development Kit（即 JDK），那么JDK 包括 JRE，因此不必单独下载。
+
+JRE 8: [Download Java](https://www.java.com/en/download/manual.jsp)
+
+JDK 26: [Java Downloads | Oracle 中国](https://www.oracle.com/cn/java/technologies/downloads/#jdk26-windows)
+
+### Ozone
+
+[SEGGER - The Embedded Experts - Downloads - J-Link / J-Trace](https://www.segger.cn/downloads/jlink/#Ozone)
+
+Ozone是由SEGGER公司发布的一款嵌入式调试器和性能分析器，一般搭配SEGGER J-LINK使用。
+
+**简介：**
+
+- 适用于Arm和RISC-V嵌入式应用的全功能图形调试器
+- 支持大多数工具链和集成开发环境（IDE）的 C、C++ 和 Rust 源代码级调试
+- 集成性能分析工具，包括指令追踪、代码分析和代码覆盖
+
+### Multisim
+
+Multisim是NI公司（National Instruments）推出的电路仿真和设计软件。它的主要用途是搭建虚拟电路原理图，通过软件模拟电路运行状态，验证电路拓扑、观察各节点的电压电流波形。
+
+
+
+## 开发环境
+
+### VSCode
+
+[Visual Studio Code - The open source AI code editor](https://code.visualstudio.com/)
+
+Visual Studio Code由微软开发，是一款免费、开源且功能强大的轻量级IDE。它最大的特色是其高度的自定义能力和扩展性，支持大量编程语言和框架，开发者可以通过丰富的插件市场定制个性化的开发环境。
+
+硬件组与电控组在MCU开发的区别在于，硬件不只是开发STM32芯片，其他的MCU芯片也会涉及到，写的语言也不一定是C/C++，所以诸如CLion、VS对单一语言适用优化的IDE不能满足硬件组的全面需求。VSCode作为通用文本编辑器加上社区强大的拓展，可以适用各个开发平台。
+
+必装插件：
+
+1. C/C++ (Microsoft)
+2. CMake Tools (Microsoft)
+3. Makefile Tools (Microsoft)
+4. Cortex-Debug (marus25)
+
+### CMake
+
+[Download CMake](https://cmake.org/download/)
+
+CMake 是个一个开源的跨平台自动化建构系统，用来管理软件建置的程序，并不依赖于某特定编译器，并可支持多层目录、多个应用程序与多个函数库。
+
+CMake 本身不是构建工具，而是生成构建系统的工具，它生成的构建系统可以使用不同的编译器和工具链。
+
+### MinGW-w64
+
+官网：[Pre-built Toolchains - mingw-w64](https://www.mingw-w64.org/downloads/#msys2)
+
+下载地址：[MinGW-w64 - for 32 and 64 bit Windows download | SourceForge.net](https://sourceforge.net/projects/mingw-w64/)
+
+MinGW（Minimalist GNU for Windows） 是一个用于 Windows 平台的开发工具集，它提供了一组 GNU 工具和库，可以用于编译和构建本地的 Windows 应用程序。MinGW 的目标是在 Windows 环境下提供类似于 Unix/Linux 环境下的开发工具，使开发者能够轻松地在 Windows 上编写和编译 C、C++ 等程序。
+
+硬件组用于在Windows上编译原生或交叉编译（如Arm嵌入式），使用 `make` 命令构建CubeMX生成的Makefile工程。
+
+
+
+## 其他
+
+### Git
+
+[Git - Install for Windows](https://git-scm.com/install/windows)
+
+团队协作必备，用于代码和文档的版本管理。建议安装时选择 `Git from the command line and also from 3rd-party software`，以便VSCode终端直接调用。
+  </script>
+
+  <script>
+    const source = document.getElementById('markdownSource').textContent.trim();
+    const body = document.getElementById('markdownBody');
+    const toc = document.getElementById('tocList');
+    const progressBar = document.getElementById('progressBar');
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function inlineMarkdown(value) {
+      let html = escapeHtml(value);
+      const codeTokens = [];
+      html = html.replace(/`([^`]+)`/g, (_, code) => {
+        codeTokens.push(`<code>${code}</code>`);
+        return `@@CODE${codeTokens.length - 1}@@`;
+      });
+      html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (_, label, url) =>
+        `<a href="${url}" target="_blank" rel="noreferrer">${label}</a>`
+      );
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+      html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+      return html.replace(/@@CODE(\d+)@@/g, (_, index) => codeTokens[index]);
+    }
+
+    function slugify(value, used) {
+      const base = value
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\u4e00-\u9fff -]/g, '')
+        .replace(/\s+/g, '-');
+      const count = used[base] || 0;
+      used[base] = count + 1;
+      return count ? `${base}-${count + 1}` : base;
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+      const html = [];
+      const headings = [];
+      const usedSlugs = {};
+      let inFrontmatter = false;
+      let frontmatterDone = false;
+      let inCode = false;
+      let codeLanguage = '';
+      let codeLines = [];
+      let paragraph = [];
+      let listType = null;
+
+      function closeParagraph() {
+        if (paragraph.length) {
+          html.push(`<p>${inlineMarkdown(paragraph.join(' '))}</p>`);
+          paragraph = [];
+        }
+      }
+
+      function closeList() {
+        if (listType) {
+          html.push(`</${listType}>`);
+          listType = null;
+        }
+      }
+
+      function closeCode() {
+        const languageClass = codeLanguage ? ` class="language-${escapeHtml(codeLanguage)}"` : '';
+        html.push(`<pre><code${languageClass}>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+        inCode = false;
+        codeLanguage = '';
+        codeLines = [];
+      }
+
+      lines.forEach((line, index) => {
+        if (index === 0 && line.trim() === '---') {
+          inFrontmatter = true;
+          return;
+        }
+        if (inFrontmatter) {
+          if (line.trim() === '---') {
+            inFrontmatter = false;
+            frontmatterDone = true;
+          }
+          return;
+        }
+        if (!frontmatterDone && line.trim() === '---') return;
+
+        if (line.trim().startsWith('```')) {
+          closeParagraph();
+          closeList();
+          if (inCode) {
+            closeCode();
+          } else {
+            inCode = true;
+            codeLanguage = line.trim().slice(3).trim();
+          }
+          return;
+        }
+        if (inCode) {
+          codeLines.push(line);
+          return;
+        }
+
+        const heading = line.match(/^(#{1,4})\s+(.+?)\s*#*$/);
+        if (heading) {
+          closeParagraph();
+          closeList();
+          const level = heading[1].length;
+          const text = heading[2];
+          const id = slugify(text, usedSlugs);
+          headings.push({ level, text, id });
+          html.push(`<h${level} id="${id}">${inlineMarkdown(text)}</h${level}>`);
+          return;
+        }
+
+        const unordered = line.match(/^\s*[-*+]\s+(.+)$/);
+        const ordered = line.match(/^\s*\d+\.\s+(.+)$/);
+        if (unordered || ordered) {
+          closeParagraph();
+          const nextType = unordered ? 'ul' : 'ol';
+          if (listType !== nextType) {
+            closeList();
+            listType = nextType;
+            html.push(`<${listType}>`);
+          }
+          html.push(`<li>${inlineMarkdown((unordered || ordered)[1])}</li>`);
+          return;
+        }
+
+        if (/^\s*>\s?/.test(line)) {
+          closeParagraph();
+          closeList();
+          html.push(`<blockquote>${inlineMarkdown(line.replace(/^\s*>\s?/, ''))}</blockquote>`);
+          return;
+        }
+
+        if (/^\s*---+\s*$/.test(line)) {
+          closeParagraph();
+          closeList();
+          html.push('<hr>');
+          return;
+        }
+
+        if (!line.trim()) {
+          closeParagraph();
+          closeList();
+          return;
+        }
+
+        closeList();
+        paragraph.push(line.trim());
+      });
+
+      closeParagraph();
+      closeList();
+      if (inCode) closeCode();
+      const firstHeadingId = headings[0]?.id;
+      const content = firstHeadingId
+        ? html.filter(item => !item.startsWith(`<h1 id="${firstHeadingId}">`)).join('\n')
+        : html.join('\n');
+      body.innerHTML = content + '<p class="footnote">本文档内容来自项目中的 <code>硬件组环境配置指引.md</code> 文件。</p>';
+      document.getElementById('documentTitle').textContent = headings[0]?.text || 'Markdown 文档';
+
+      toc.innerHTML = headings
+        .filter(heading => heading.level > 1)
+        .map(heading => `<li><a class="level-${heading.level}" href="#${heading.id}">${inlineMarkdown(heading.text)}</a></li>`)
+        .join('');
+    }
+
+    function updateProgress() {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    }
+
+    renderMarkdown(source);
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  </script>
+</body>
+</html>
